@@ -32,7 +32,7 @@ Samples<-read.table("location.txt",row.names = 1,header =T ,sep = "\t")
 EF_data<-extract(worldclim,Samples,method="bilinear")
 
 #db-RDA
-p_list = c("vegan", "ggplot2", "ggpubr", "ggrepel", "rdacca.hp", "psych", "reshape2")
+p_list = c("vegan", "ggplot2", "ggpubr", "ggrepel", "rdacca.hp", "psych", "reshape2","missForest")
 for(p in p_list){if (!requireNamespace(p)){install.packages(p)}
   library(p, character.only = TRUE, quietly = TRUE, warn.conflicts = FALSE)}
 
