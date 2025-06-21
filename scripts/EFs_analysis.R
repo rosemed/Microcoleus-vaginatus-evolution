@@ -40,29 +40,23 @@ set.seed(123)
 dirname="db-RDA"
 dir.create(dirname)
 env_total=read.table('microcoleus_env0213.txt',header = T,row.names = 1)
-env_total=na.omit(env_total)
-env_total=as.data.frame(rda(env_total,scale = T)$Ybar)
+# Perform Random Forest imputation for NA Values
+imputed_data_list <- missForest(env_total)
+env_total <- imputed_data_list$ximp
+env=as.data.frame(rda(env_total,scale = T)$Ybar)
 
-og=read.table('132_Orthogroups.GeneCount.txt',header = T,row.names = 1,sep = "\t",check.names = F)
+og=read.table('Orthogroups.GeneCount.txt',header = T,row.names = 1,sep = "\t",check.names = F)
 og_dist=as.data.frame(as.matrix(vegdist(t(og), method="bray")))
 
-pro_dist=read.table('133_SingleCopyGene.concatenated.phy.mldist',header = T,row.names = 1,sep = "\t",check.names = F)
-gene_dist=read.table('133_SingleCopyGeneSeq.concatenated.phy.mldist',header = T,row.names = 1,sep = "\t",check.names = F)
+pro_dist=read.table('SingleCopyGene.concatenated.phy.mldist',header = T,row.names = 1,sep = "\t",check.names = F)
+gene_dist=read.table('SingleCopyGeneSeq.concatenated.phy.mldist',header = T,row.names = 1,sep = "\t",check.names = F)
 
-ani=read.table('132_ANI.txt.matrix',header = T,row.names = 1,sep = "\t",fill = T,check.names = F)
-for (i in 1:nrow(ani)){
-  for (j in (i+1):nrow(ani)) {
-    ani[i,j]=ani[j,i]
-  }
-  ani[i,i]=100
-}
-ani=ani[,-133]
-ani_dist=100-ani
+ani=read.table('ANI.txt.matrix',header = T,row.names = 1,sep = "\t",fill = T,check.names = F)
+ani_dist=(100-ani)/10
 
 group <- read.table("phylocluster.txt", header = T,row.names = 1,sep="\t", comment.char="")
 cap=NULL
 for (dist_index in c("og","pro","gene","ani")){
-env=env_total
 if (dist_index=="ani"){dist_mat=get(paste0(dist_index,"_dist"))/10
 }else{dist_mat=get(paste0(dist_index,"_dist"))}
 dist_mat=dist_mat[rownames(dist_mat) %in% rownames(env),colnames(dist_mat) %in% rownames(env)]
