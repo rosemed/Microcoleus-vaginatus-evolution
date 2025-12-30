@@ -9,7 +9,7 @@ pca_data=function(data,group){
   pc1=round(variance_prop[1]*100,2)
   pc2=round(variance_prop[2]*100,2)
   p=ggplot(data=pca_result,aes(x=PC1,y=PC2))+
-    theme_bw()+#主题设置
+    theme_bw()+
     geom_point(aes(color = group), shape = 19, size=2)+
     theme(panel.grid = element_blank())+
     geom_vline(xintercept = 0,lty="dashed", size = 1, color = 'grey50')+
@@ -21,11 +21,11 @@ pca_data=function(data,group){
                  alpha=0.4)+
     theme(legend.title = element_blank(),
           panel.border = element_blank(),panel.grid.major = element_blank())+
-    theme(axis.title.x=element_text(size=12),#修改X轴标题文本
-          axis.title.y=element_text(size=12,angle=90),#修改y轴标题文本
-          axis.text.y=element_text(size=10),#修改x轴刻度标签文本
-          axis.text.x=element_text(size=10),#修改y轴刻度标签文本
-          panel.grid=element_blank())+#隐藏网格线
+    theme(axis.title.x=element_text(size=12),
+          axis.title.y=element_text(size=12,angle=90),
+          axis.text.y=element_text(size=10),
+          axis.text.x=element_text(size=10),
+          panel.grid=element_blank())+
     scale_color_manual(values = color)+scale_fill_manual(values = color)+
     labs(x =paste0("PC1(",pc1,"%)"),y = paste0("PC2(",pc2,"%)"))
   return(p)
